@@ -1,0 +1,3 @@
+export const MAX_GUESSES = 3;
+export const DEFAULT_NOTIFICATION_MS = 2500;
+export const ROUND_OVER_NOTIFICATION_MS = 3500;
