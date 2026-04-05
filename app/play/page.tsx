@@ -51,7 +51,6 @@ export default function PlayLobbyPage() {
     >
       <main className="relative flex w-full grow flex-col items-center justify-center p-8 sm:p-14">
         <div className="flex w-full max-w-2xl flex-col items-center text-center">
-          {/* Back link */}
           <Link
             href="/"
             className={`${mono.className} mb-12 flex items-center gap-1.5 self-start text-xs font-semibold tracking-widest text-neutral-400 uppercase transition-colors hover:text-black`}
@@ -60,7 +59,6 @@ export default function PlayLobbyPage() {
             {playStrings.backToVibedle}
           </Link>
 
-          {/* Headline */}
           <h1 className="mb-3 text-6xl font-extrabold leading-[0.9] tracking-tighter uppercase sm:text-7xl">
             {playStrings.headingHowTo}
             <br />
@@ -68,7 +66,6 @@ export default function PlayLobbyPage() {
           </h1>
           <div className="mb-10 h-1 w-12 bg-black" />
 
-          {/* Rules */}
           <div className={`mb-10 w-full ${borderSubtle} bg-neutral-50`}>
             {playStrings.rules.map(({ num, text }, i) => (
               <div
@@ -89,7 +86,6 @@ export default function PlayLobbyPage() {
             ))}
           </div>
 
-          {/* Stats strip */}
           <div
             className={`mb-10 flex w-full divide-x divide-neutral-200 ${borderSubtle}`}
           >
@@ -112,7 +108,6 @@ export default function PlayLobbyPage() {
             ))}
           </div>
 
-          {/* CTA */}
           <button
             onClick={onStart}
             className="group relative w-full overflow-hidden border-2 border-black bg-black px-8 py-8 text-white transition-colors hover:bg-white hover:text-black"

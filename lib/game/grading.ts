@@ -2,13 +2,14 @@ import type { GameGrade } from "@/lib/game/types";
 import { gradeStrings } from "@/lib/game/strings";
 
 export function gradeGame(score: number, totalRounds: number): GameGrade {
-  if (score === totalRounds) {
+  const percentage = (score / totalRounds) * 100;
+  if (percentage >= 90) {
     return gradeStrings.perfect;
   }
-  if (score === totalRounds - 1) {
+  if (percentage >= 70) {
     return gradeStrings.solid;
   }
-  if (score === totalRounds - 2) {
+  if (percentage >= 30) {
     return gradeStrings.gettingThere;
   }
   return gradeStrings.missedAll;

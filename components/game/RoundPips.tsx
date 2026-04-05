@@ -20,9 +20,12 @@ export function RoundPips({
   const [fadedOut, setFadedOut] = useState(false);
 
   useEffect(() => {
-    setFadedOut(false);
-    const id = window.setTimeout(() => setFadedOut(true), PIPS_VISIBLE_MS);
-    return () => window.clearTimeout(id);
+    const show = requestAnimationFrame(() => setFadedOut(false));
+    const hide = window.setTimeout(() => setFadedOut(true), PIPS_VISIBLE_MS);
+    return () => {
+      cancelAnimationFrame(show);
+      window.clearTimeout(hide);
+    };
   }, [round]);
 
   return (

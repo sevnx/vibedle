@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useMutation, useQuery } from "convex/react";
+import { useConvexAuth, useMutation, useQuery } from "convex/react";
 import { useRouter } from "next/navigation";
 
 import { api } from "@/convex/_generated/api";
@@ -24,10 +24,12 @@ type RoundPayload = {
 
 export function useGameState({ gameId }: { gameId: string }) {
   const router = useRouter();
+  const { isLoading: convexAuthLoading, isAuthenticated } = useConvexAuth();
   const submitGuess = useMutation(api.games.submitGuess);
   const convexGameId = gameId as Id<"gameSessions">;
 
-  const [round, setRound] = useState(0);
+  /** After resume, overrides server-derived index when advancing or using mutation payload. */
+  const [clientRound, setClientRound] = useState<number | null>(null);
   const [currentGuesses, setCurrentGuesses] = useState<GuessRecord[]>([]);
   const [selectedModel, setSelectedModel] = useState<ModelId | null>(null);
   const [usedSkill, setUsedSkill] = useState(false);
@@ -38,22 +40,35 @@ export function useGameState({ gameId }: { gameId: string }) {
   const [notifVisible, setNotifVisible] = useState(false);
   const [roundOverride, setRoundOverride] = useState<RoundPayload | null>(null);
   const [nextRoundPayload, setNextRoundPayload] = useState<RoundPayload | null>(null);
-  const [navigatingToRecap, setNavigatingToRecap] = useState(false);
 
   const notifTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const resume = useQuery(
+    api.games.getGameResume,
+    convexAuthLoading || !isAuthenticated ? "skip" : { gameId: convexGameId },
+  );
+
+  const effectiveRoundIndex =
+    clientRound !== null
+      ? clientRound
+      : resume && resume.sessionStatus === "active"
+        ? resume.currentRoundIndex
+        : null;
+
   const fetchedRound = useQuery(
     api.games.getRound,
-    roundOverride
+    roundOverride || convexAuthLoading || !isAuthenticated || effectiveRoundIndex === null || resume?.sessionStatus !== "active"
       ? "skip"
       : {
           gameId: convexGameId,
-          roundIndex: round,
+          roundIndex: effectiveRoundIndex,
         },
   );
 
   const activeRound = roundOverride ?? fetchedRound;
-  const totalRounds = activeRound?.totalRounds ?? TOTAL_ROUNDS_FALLBACK;
+  const totalRounds =
+    activeRound?.totalRounds ??
+    (resume && resume.sessionStatus === "active" ? resume.totalRounds : TOTAL_ROUNDS_FALLBACK);
   const websiteUrl = resolveHostedSiteIframeSrc(activeRound?.websiteUrl ?? "about:blank");
   const isRoundLoading = !activeRound;
 
@@ -74,6 +89,37 @@ export function useGameState({ gameId }: { gameId: string }) {
     },
     [],
   );
+
+  useEffect(() => {
+    setClientRound(null);
+    setRoundOverride(null);
+    setNextRoundPayload(null);
+    setCurrentGuesses([]);
+    setSelectedModel(null);
+    setUsedSkill(false);
+    setPhase("playing");
+    setRoundResults([]);
+    setRoundResolved(false);
+    setNotification(null);
+    setNotifVisible(false);
+  }, [gameId]);
+
+  useEffect(() => {
+    if (resume?.sessionStatus === "completed") {
+      router.replace(`/game/${gameId}/recap`);
+    }
+  }, [resume, gameId, router]);
+
+  useEffect(() => {
+    if (!resume || resume.sessionStatus !== "active") {
+      return;
+    }
+    if (clientRound !== null) {
+      return;
+    }
+    setClientRound(resume.currentRoundIndex);
+    setRoundResults(resume.priorRoundResults);
+  }, [resume, clientRound]);
 
   const handleGuess = useCallback(async () => {
     if (!selectedModel || roundResolved || !activeRound) {
@@ -137,19 +183,22 @@ export function useGameState({ gameId }: { gameId: string }) {
   }, [activeRound, convexGameId, currentGuesses, roundResolved, selectedModel, showNotif, submitGuess, usedSkill]);
 
   const advanceRound = useCallback(async () => {
-    if (round + 1 >= totalRounds) {
+    const resumeActive = resume && resume.sessionStatus === "active";
+    const currentIdx =
+      clientRound !== null ? clientRound : resumeActive ? resume.currentRoundIndex : 0;
+
+    if (currentIdx + 1 >= totalRounds) {
       setPhase("completed");
-      setNavigatingToRecap(true);
       router.push(`/game/${gameId}/recap`);
       return;
     }
 
     if (nextRoundPayload) {
-      setRound(nextRoundPayload.roundIndex);
+      setClientRound(nextRoundPayload.roundIndex);
       setRoundOverride(nextRoundPayload);
       setNextRoundPayload(null);
     } else {
-      setRound((value) => value + 1);
+      setClientRound(currentIdx + 1);
       setRoundOverride(null);
     }
 
@@ -157,16 +206,20 @@ export function useGameState({ gameId }: { gameId: string }) {
     setSelectedModel(null);
     setUsedSkill(false);
     setRoundResolved(false);
-  }, [gameId, nextRoundPayload, round, router, totalRounds]);
+  }, [clientRound, gameId, nextRoundPayload, resume, router, totalRounds]);
 
   const canGuess = !!selectedModel && !roundResolved && !isRoundLoading;
 
-  const showRoundTransitionLoading = navigatingToRecap || (phase === "playing" && !activeRound);
+  const resumeLoading = resume === undefined;
+  const showRoundTransitionLoading =
+    phase === "playing" && (resumeLoading || !activeRound || effectiveRoundIndex === null);
 
   const nextRoundPreloadSrc =
     phase === "playing" && roundResolved && nextRoundPayload
       ? resolveHostedSiteIframeSrc(nextRoundPayload.websiteUrl)
       : null;
+
+  const round = effectiveRoundIndex ?? 0;
 
   return {
     round,

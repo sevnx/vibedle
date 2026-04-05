@@ -1,49 +1,49 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { Epilogue, Azeret_Mono, Lilita_One, Newsreader } from 'next/font/google';
-import { ClaudeAI } from '@/components/icons/ClaudeAI';
-import { GeminiAI } from '@/components/icons/GeminiAI';
-import { OpenAI } from '@/components/icons/OpenAI';
-import { GitHub } from '@/components/icons/GitHub';
-import { Website } from '@/components/icons/Website';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { Epilogue, Azeret_Mono, Lilita_One, Newsreader } from "next/font/google";
+import { ClaudeAI } from "@/components/icons/ClaudeAI";
+import { GeminiAI } from "@/components/icons/GeminiAI";
+import { OpenAI } from "@/components/icons/OpenAI";
+import { GitHub } from "@/components/icons/GitHub";
+import { Website } from "@/components/icons/Website";
 
 const epilogue = Epilogue({
-  subsets: ['latin'],
-  weight: ['400', '600', '800'],
-  display: 'swap',
+  subsets: ["latin"],
+  weight: ["400", "600", "800"],
+  display: "swap",
 });
 
 const mono = Azeret_Mono({
-  subsets: ['latin'],
-  weight: ['400', '600'],
-  display: 'swap',
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  display: "swap",
 });
 
 const lilita = Lilita_One({
-  subsets: ['latin-ext'],
-  weight: ['400'],
-  display: 'swap',
+  subsets: ["latin-ext"],
+  weight: ["400"],
+  display: "swap",
 });
 
 const newsreader = Newsreader({
-  subsets: ['latin'],
-  style: ['normal'],
-  weight: ['400'],
-  display: 'swap',
+  subsets: ["latin"],
+  style: ["normal"],
+  weight: ["400"],
+  display: "swap",
 });
 
-const borderSubtle = 'border border-neutral-200';
+const borderSubtle = "border border-neutral-200";
 
 function slideClass(active: boolean) {
   return [
-    'absolute inset-0 flex items-center justify-center transition-all duration-300 ease-in-out',
-    active ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none',
-  ].join(' ');
+    "absolute inset-0 flex items-center justify-center transition-all duration-300 ease-in-out",
+    active ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none",
+  ].join(" ");
 }
 
-export default function SwissMinimalVibedle() {
+export default function HomePage() {
   const [active, setActive] = useState(0);
 
   useEffect(() => {
@@ -81,8 +81,8 @@ export default function SwissMinimalVibedle() {
                 <div
                   className={`flex items-center gap-3 rounded-full border border-[#D97757] bg-[#F7F0E6] px-4 py-1 ${mono.className} text-lg font-semibold tracking-tight text-[#D97757]`}
                 >
-                  <div className="size-2   shrink-0 rounded-full bg-[#D97757]" />
-                Claude 4.6 Opus
+                  <div className="size-2 shrink-0 rounded-full bg-[#D97757]" />
+                  <span>Claude 4.6 Opus</span>
                   <ClaudeAI className="size-8 shrink-0 text-[#D97757]" />
                 </div>
               </div>

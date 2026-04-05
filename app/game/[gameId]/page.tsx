@@ -1,9 +1,7 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { GameControls } from "@/components/game/GameControls";
 import { NotifCard } from "@/components/game/NotifCard";
@@ -37,16 +35,13 @@ export default function GamePage() {
     nextRoundPreloadSrc,
   } = useGameState({ gameId });
 
-  const [mainIframeReady, setMainIframeReady] = useState(false);
-
-  useLayoutEffect(() => {
-    setMainIframeReady(false);
-  }, [websiteUrl]);
+  const [iframeLoadedUrl, setIframeLoadedUrl] = useState<string | null>(null);
 
   const onMainIframeLoad = useCallback(() => {
-    setMainIframeReady(true);
-  }, []);
+    setIframeLoadedUrl(websiteUrl);
+  }, [websiteUrl]);
 
+  const mainIframeReady = iframeLoadedUrl === websiteUrl;
   const overlayVisible = showRoundTransitionLoading || !mainIframeReady;
 
   return (

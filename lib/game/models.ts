@@ -1,5 +1,4 @@
 import type { FC, SVGProps } from "react";
-import { Sparkles } from "lucide-react";
 
 import { ClaudeAI } from "@/components/icons/ClaudeAI";
 import { GeminiAI } from "@/components/icons/GeminiAI";

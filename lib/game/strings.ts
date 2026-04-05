@@ -61,13 +61,13 @@ export const playStrings = {
 
 export const gradeStrings = {
   perfect: { label: "PERFECT", sub: "You're absolutely right!" },
-  solid: { label: "SOLID", sub: "Not too bad, you need to vibe some more." },
+  solid: { label: "SOLID", sub: "Not too bad, you need to vibe a bit more." },
   gettingThere: {
     label: "GETTING THERE",
     sub: "Keep prompting. Those tokens won't burn themselves.",
   },
   missedAll: {
-    label: "MISSED ALL",
+    label: "DISAPPOINTING",
     sub: "You probably don't even have an agent running in the background.",
   },
 } as const;

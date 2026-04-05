@@ -86,7 +86,7 @@ export function GameControls({
             "flex w-32 flex-col items-center justify-center gap-3 rounded-3xl pb-6 pt-1 shadow-2xl transition-all",
             canGuess
               ? "bg-[#7C3AED] text-white shadow-purple-300 hover:bg-[#6D28D9]"
-              : "cursor-not-allowed border border-neutral-200/80 bg-white/90 text-neutral-300 shadow-2xl backdrop-blur-md",
+              : "cursor-not-allowed border border-neutral-200/80 bg-white/90 text-neutral-300 shadow-2xl",
           ].join(" ")}
         >
           <span className={`${gameMono.className} py-2 text-[0.7rem] font-semibold tracking-[0.2em] uppercase`}>

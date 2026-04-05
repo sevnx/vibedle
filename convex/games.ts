@@ -39,6 +39,23 @@ const recapPayloadValidator = v.object({
   score: v.number(),
 });
 
+const roundResultSummaryValidator = v.object({
+  solved: v.boolean(),
+  guessesUsed: v.number(),
+});
+
+const gameResumeActiveValidator = v.object({
+  sessionStatus: v.literal("active"),
+  currentRoundIndex: v.number(),
+  totalRounds: v.number(),
+  round: roundPayloadValidator,
+  priorRoundResults: v.array(roundResultSummaryValidator),
+});
+
+const gameResumeCompletedValidator = v.object({
+  sessionStatus: v.literal("completed"),
+});
+
 async function requireIdentity(ctx: QueryCtx | MutationCtx) {
   const identity = await ctx.auth.getUserIdentity();
   if (!identity) {
@@ -129,6 +146,58 @@ export const createSession = mutation({
         websiteUrl: firstRound.url,
         guessesUsed: 0,
       },
+    };
+  },
+});
+
+/** Current playable round + prior results so the client can resume after refresh. */
+export const getGameResume = query({
+  args: {
+    gameId: v.id("gameSessions"),
+  },
+  returns: v.union(gameResumeCompletedValidator, gameResumeActiveValidator),
+  handler: async (ctx, args) => {
+    const session = await getOwnedSessionOrThrow(ctx, args.gameId);
+
+    const rounds = await ctx.db
+      .query("gameRounds")
+      .withIndex("by_gameSessionId_and_roundIndex", (q) => q.eq("gameSessionId", session._id))
+      .collect();
+
+    rounds.sort((a, b) => a.roundIndex - b.roundIndex);
+
+    if (rounds.length !== session.totalRounds) {
+      throw new ConvexError("Game rounds incomplete");
+    }
+
+    if (session.status === "completed") {
+      return { sessionStatus: "completed" as const };
+    }
+
+    const playingRound = rounds.find((r) => r.status === "playing");
+    if (!playingRound) {
+      throw new ConvexError("No active round");
+    }
+
+    const currentRoundIndex = playingRound.roundIndex;
+    const priorRoundResults = rounds
+      .filter((r) => r.roundIndex < currentRoundIndex)
+      .map((r) => ({
+        solved: r.solved,
+        guessesUsed: r.guessesUsed,
+      }));
+
+    return {
+      sessionStatus: "active" as const,
+      currentRoundIndex,
+      totalRounds: session.totalRounds,
+      round: {
+        roundIndex: playingRound.roundIndex,
+        totalRounds: session.totalRounds,
+        websiteUrl: playingRound.websiteUrl,
+        guessesUsed: playingRound.guessesUsed,
+      },
+      priorRoundResults,
     };
   },
 });

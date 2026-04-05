@@ -23,7 +23,8 @@ export function ModelSelector({
 
   useEffect(() => {
     function onOutsideClick(event: MouseEvent) {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
+      const t = event.target;
+      if (ref.current && t instanceof Node && !ref.current.contains(t)) {
         setOpen(false);
       }
     }

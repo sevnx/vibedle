@@ -1,7 +1,3 @@
-/**
- * Single source of truth for playable models. Add new models only here.
- * `label` is the canonical id (stored in Convex, used in game state).
- */
 export const MODEL_CATALOG = [
   { company: "OpenAI", label: "GPT 5.4" },
   { company: "OpenAI", label: "GPT 5.4 Mini" },
