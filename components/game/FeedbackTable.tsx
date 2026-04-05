@@ -33,11 +33,11 @@ export function FeedbackTable({
         <div className="flex flex-1 border-l border-neutral-200 px-4 py-2.5">
           <HeaderLabel text={gameStrings.feedbackTable.model} />
         </div>
-        <div className="flex w-28 justify-center border-l border-neutral-200 px-3 py-2.5">
+        <div className="flex w-24 justify-center border-l border-neutral-200 px-3 py-2.5">
           <HeaderLabel text={gameStrings.feedbackTable.uiSkill} />
         </div>
         {showResult && (
-          <div className="flex w-14 items-center justify-center border-l border-neutral-200 px-2 py-2.5">
+          <div className="flex w-18 items-center justify-center border-l border-neutral-200 px-2 py-2.5">
             <HeaderLabel text={gameStrings.feedbackTable.result} />
           </div>
         )}
@@ -70,7 +70,7 @@ export function FeedbackTable({
               </span>
             </div>
 
-            <div className="flex w-28 justify-center border-l border-neutral-200 px-2 py-3">
+            <div className="flex w-24 justify-center border-l border-neutral-200 px-2 py-3">
               <div
                 className={[
                   "flex size-10 items-center justify-center rounded-xl border",
@@ -84,7 +84,7 @@ export function FeedbackTable({
             {showResult && (
               <div
                 className={[
-                  "flex w-14 self-stretch items-center justify-center border-l border-neutral-200 py-2",
+                  "flex w-18 self-stretch items-center justify-center border-l border-neutral-200 py-2",
                   isCorrect ? "bg-emerald-50" : "bg-red-50",
                 ].join(" ")}
               >

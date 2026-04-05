@@ -23,7 +23,7 @@ export const gameStrings = {
     lab: "LAB",
     model: "MODEL",
     uiSkill: "SKILL",
-    result: "RESULT",
+    result: "CORRECT",
   },
   recap: {
     title: "GAME OVER",
