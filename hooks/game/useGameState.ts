@@ -1,18 +1,30 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useMutation, useQuery } from "convex/react";
 import { useRouter } from "next/navigation";
 
+import { api } from "@/convex/_generated/api";
+import type { Id } from "@/convex/_generated/dataModel";
 import {
   DEFAULT_NOTIFICATION_MS,
-  MAX_GUESSES,
   ROUND_OVER_NOTIFICATION_MS,
 } from "@/lib/game/constants";
-import { gameDataSource, GAME_ROUNDS } from "@/lib/game/data-source-static";
 import type { GuessRecord, ModelId, Notification, Phase, RoundResult } from "@/lib/game/types";
+
+const TOTAL_ROUNDS_FALLBACK = 5;
+
+type RoundPayload = {
+  roundIndex: number;
+  totalRounds: number;
+  websiteUrl: string;
+  guessesUsed: number;
+};
 
 export function useGameState({ gameId }: { gameId: string }) {
   const router = useRouter();
+  const submitGuess = useMutation(api.games.submitGuess);
+  const convexGameId = gameId as Id<"gameSessions">;
 
   const [round, setRound] = useState(0);
   const [currentGuesses, setCurrentGuesses] = useState<GuessRecord[]>([]);
@@ -23,10 +35,25 @@ export function useGameState({ gameId }: { gameId: string }) {
   const [roundResolved, setRoundResolved] = useState(false);
   const [notification, setNotification] = useState<Notification | null>(null);
   const [notifVisible, setNotifVisible] = useState(false);
+  const [roundOverride, setRoundOverride] = useState<RoundPayload | null>(null);
+  const [nextRoundPayload, setNextRoundPayload] = useState<RoundPayload | null>(null);
 
   const notifTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const totalRounds = useMemo(() => GAME_ROUNDS.length, []);
+  const fetchedRound = useQuery(
+    api.games.getRound,
+    roundOverride
+      ? "skip"
+      : {
+          gameId: convexGameId,
+          roundIndex: round,
+        },
+  );
+
+  const activeRound = roundOverride ?? fetchedRound;
+  const totalRounds = activeRound?.totalRounds ?? TOTAL_ROUNDS_FALLBACK;
+  const websiteUrl = activeRound?.websiteUrl ?? "about:blank";
+  const isRoundLoading = !activeRound;
 
   const showNotif = useCallback((nextNotif: Notification, durationMs = DEFAULT_NOTIFICATION_MS) => {
     if (notifTimerRef.current) {
@@ -46,16 +73,14 @@ export function useGameState({ gameId }: { gameId: string }) {
     [],
   );
 
-  useEffect(() => {
-    void gameDataSource.getRound(gameId, round);
-  }, [gameId, round]);
-
   const handleGuess = useCallback(async () => {
-    if (!selectedModel || roundResolved) {
+    if (!selectedModel || roundResolved || !activeRound) {
       return;
     }
 
-    const submission = await gameDataSource.submitGuess(gameId, round, currentGuesses, {
+    const submission = await submitGuess({
+      gameId: convexGameId,
+      roundIndex: activeRound.roundIndex,
       model: selectedModel,
       usedSkill,
     });
@@ -68,35 +93,47 @@ export function useGameState({ gameId }: { gameId: string }) {
         solved: true,
         guessesUsed: submission.guessesUsed,
       };
-      setRoundResults((prev) => [...prev, result]);
-      showNotif({ type: "correct", round, guesses: newGuesses });
+      setRoundResults((prev) => {
+        const next = [...prev];
+        next[activeRound.roundIndex] = result;
+        return next;
+      });
+      showNotif({ type: "correct", round: activeRound.roundIndex, guesses: newGuesses });
       setRoundResolved(true);
+      setSelectedModel(null);
+      setNextRoundPayload(submission.nextRound);
       return;
     }
 
     if (submission.exhausted) {
       const result: RoundResult = {
         solved: false,
-        guessesUsed: MAX_GUESSES,
+        guessesUsed: submission.guessesUsed,
       };
-      setRoundResults((prev) => [...prev, result]);
+      setRoundResults((prev) => {
+        const next = [...prev];
+        next[activeRound.roundIndex] = result;
+        return next;
+      });
       showNotif(
         {
           type: "round-over",
-          round,
+          round: activeRound.roundIndex,
           guesses: newGuesses,
-          correctModel: submission.correctModel,
-          correctUsedSkill: submission.correctUsedSkill,
+          correctModel: submission.correctModel ?? undefined,
+          correctUsedSkill: submission.correctUsedSkill ?? undefined,
         },
         ROUND_OVER_NOTIFICATION_MS,
       );
       setRoundResolved(true);
+      setSelectedModel(null);
+      setNextRoundPayload(submission.nextRound);
       return;
     }
 
-    showNotif({ type: "wrong", round, guesses: newGuesses });
+    showNotif({ type: "wrong", round: activeRound.roundIndex, guesses: newGuesses });
     setSelectedModel(null);
-  }, [currentGuesses, gameId, round, roundResolved, selectedModel, showNotif, usedSkill]);
+  }, [activeRound, convexGameId, currentGuesses, roundResolved, selectedModel, showNotif, submitGuess, usedSkill]);
 
   const advanceRound = useCallback(async () => {
     if (round + 1 >= totalRounds) {
@@ -105,17 +142,26 @@ export function useGameState({ gameId }: { gameId: string }) {
       return;
     }
 
-    setRound((value) => value + 1);
+    if (nextRoundPayload) {
+      setRound(nextRoundPayload.roundIndex);
+      setRoundOverride(nextRoundPayload);
+      setNextRoundPayload(null);
+    } else {
+      setRound((value) => value + 1);
+      setRoundOverride(null);
+    }
+
     setCurrentGuesses([]);
     setSelectedModel(null);
     setUsedSkill(false);
     setRoundResolved(false);
-  }, [gameId, round, router, totalRounds]);
+  }, [gameId, nextRoundPayload, round, router, totalRounds]);
 
-  const canGuess = !!selectedModel && !roundResolved;
+  const canGuess = !!selectedModel && !roundResolved && !isRoundLoading;
 
   return {
     round,
+    websiteUrl,
     currentGuesses,
     selectedModel,
     setSelectedModel,

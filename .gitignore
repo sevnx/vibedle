@@ -46,3 +46,5 @@ next-env.d.ts
 
 # AI slop
 docs/plans/*
+.agents/*
+.claude/*

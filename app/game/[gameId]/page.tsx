@@ -18,6 +18,7 @@ export default function GamePage() {
 
   const {
     round,
+    websiteUrl,
     selectedModel,
     setSelectedModel,
     usedSkill,
@@ -38,7 +39,7 @@ export default function GamePage() {
       className={`fixed inset-0 overflow-hidden bg-white text-black selection:bg-[#7C3AED] selection:text-white ${gameEpilogue.className}`}
     >
       <iframe
-        src="https://example.com"
+        src={websiteUrl}
         sandbox="allow-scripts allow-same-origin"
         referrerPolicy="no-referrer"
         title={gameStrings.iframeTitle}

@@ -1,37 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useQuery } from "convex/react";
 import { useParams } from "next/navigation";
 
+import { api } from "@/convex/_generated/api";
+import type { Id } from "@/convex/_generated/dataModel";
 import { RecapView } from "@/components/game/RecapView";
-import { gameDataSource } from "@/lib/game/data-source-static";
 import { gameMono } from "@/lib/game/fonts";
 import { gradeGame } from "@/lib/game/grading";
-import type { RecapPayload } from "@/lib/game/contracts";
 
 export default function GameRecapPage() {
   const params = useParams<{ gameId: string }>();
   const routeGameId = params.gameId;
   const gameId = Array.isArray(routeGameId) ? routeGameId[0] : routeGameId;
-
-  const [recap, setRecap] = useState<RecapPayload | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      const data = await gameDataSource.getRecap(gameId);
-      if (!cancelled) {
-        setRecap(data);
-      }
-    }
-
-    void load();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [gameId]);
+  const recap = useQuery(api.games.getRecap, {
+    gameId: gameId as Id<"gameSessions">,
+  });
 
   if (!recap) {
     return (

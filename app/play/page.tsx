@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { ArrowLeft, ChevronLeft, ChevronRight, Copyright } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useMutation } from "convex/react";
 import {
   Epilogue,
   Azeret_Mono,
@@ -11,7 +12,7 @@ import {
 } from "next/font/google";
 import { GitHub } from "@/components/GitHub";
 import { Website } from "@/components/Website";
-import { gameDataSource } from "@/lib/game/data-source-static";
+import { api } from "@/convex/_generated/api";
 import { playStrings } from "@/lib/game/strings";
 
 const epilogue = Epilogue({
@@ -37,11 +38,12 @@ const borderSubtle = "border border-neutral-200";
 
 export default function PlayLobbyPage() {
   const router = useRouter();
+  const createSession = useMutation(api.games.createSession);
 
   const onStart = useCallback(async () => {
-    const { gameId } = await gameDataSource.createGame();
+    const { gameId } = await createSession({});
     router.push(`/game/${gameId}`);
-  }, [router]);
+  }, [createSession, router]);
 
   return (
     <div
