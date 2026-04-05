@@ -14,6 +14,7 @@ import { GitHub } from "@/components/icons/GitHub";
 import { Website } from "@/components/icons/Website";
 import { api } from "@/convex/_generated/api";
 import { playStrings } from "@/lib/game/strings";
+import { Footer } from "@/components/Footer";
 
 const epilogue = Epilogue({
   subsets: ["latin"],
@@ -126,35 +127,7 @@ export default function PlayLobbyPage() {
         </div>
       </main>
 
-      <footer
-        className={`mt-auto grid w-full grid-cols-2 border-t border-neutral-200 text-sm tracking-wider uppercase ${mono.className} text-neutral-500`}
-      >
-        <div className="flex items-center justify-center gap-1.5 border-r border-neutral-200 p-5">
-          <Copyright className="size-3.5 shrink-0" aria-hidden />
-          {playStrings.footerYear}
-        </div>
-        <div className="flex items-center justify-end gap-2 p-5 text-right">
-          <span>{playStrings.footerMadeBy}</span>
-          <a
-            href="https://github.com/sevnx"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-neutral-500 transition-colors hover:text-[#7C3AED]"
-            aria-label="sevnx on GitHub"
-          >
-            <GitHub className="size-4" aria-hidden />
-          </a>
-          <a
-            href="https://sevnx.dev"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-neutral-500 transition-colors hover:text-[#7C3AED]"
-            aria-label="sevnx.dev"
-          >
-            <Website className="size-4" aria-hidden />
-          </a>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
