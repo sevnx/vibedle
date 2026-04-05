@@ -1,3 +1,5 @@
+import { AlertCircle, Check, Ellipsis, X } from "lucide-react";
+
 import { MAX_GUESSES } from "@/lib/game/constants";
 import { gameMono, gameNewsreader } from "@/lib/game/fonts";
 import { gameStrings } from "@/lib/game/strings";
@@ -52,7 +54,7 @@ export function NotifCard({
         <>
           <div className="mb-3 flex items-center gap-3">
             <div className="flex size-7 items-center justify-center rounded-full bg-emerald-100">
-              <span className="text-sm text-emerald-600">{gameStrings.symbols.check}</span>
+              <Check className="size-4 text-emerald-600" aria-hidden strokeWidth={2.5} />
             </div>
             <div>
               <div className={`${gameMono.className} text-xs font-bold tracking-widest text-emerald-600 uppercase`}>
@@ -75,7 +77,7 @@ export function NotifCard({
         <>
           <div className="mb-3 flex items-center gap-3">
             <div className="flex size-7 items-center justify-center rounded-full bg-red-100">
-              <span className="text-sm text-red-500">{gameStrings.symbols.cross}</span>
+              <X className="size-4 text-red-500" aria-hidden strokeWidth={2.5} />
             </div>
             <div>
               <div className={`${gameMono.className} text-xs font-bold tracking-widest text-red-500 uppercase`}>
@@ -108,14 +110,17 @@ export function NotifCard({
         <>
           <div className="mb-3 flex items-center gap-3">
             <div className="flex size-7 items-center justify-center rounded-full bg-neutral-100">
-              <span className="text-sm text-neutral-500">{gameStrings.symbols.warning}</span>
+              <AlertCircle className="size-4 text-neutral-500" aria-hidden strokeWidth={2.5} />
             </div>
             <div>
               <div className={`${gameMono.className} text-xs font-bold tracking-widest text-neutral-700 uppercase`}>
                 {gameStrings.notif.roundOver}
               </div>
-              <div className={`${gameMono.className} text-[0.6rem] text-neutral-400`}>
-                {gameStrings.notif.itWas}
+              <div
+                className={`${gameMono.className} flex items-center gap-1 text-[0.6rem] text-neutral-400`}
+              >
+                <span>{gameStrings.notif.itWas}</span>
+                <Ellipsis className="size-3.5 shrink-0 opacity-70" aria-hidden strokeWidth={2} />
               </div>
             </div>
           </div>

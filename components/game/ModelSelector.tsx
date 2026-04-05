@@ -1,5 +1,6 @@
 "use client";
 
+import { Check, ChevronDown, ChevronUp, Ellipsis } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { gameMono } from "@/lib/game/fonts";
@@ -67,7 +68,7 @@ export function ModelSelector({
               </span>
             </div>
             {selected === model.id && (
-              <span className="ml-auto text-sm text-black">{gameStrings.symbols.check}</span>
+              <Check className="ml-auto size-4 shrink-0 text-black" aria-hidden strokeWidth={2.5} />
             )}
           </button>
         ))}
@@ -96,12 +97,17 @@ export function ModelSelector({
             <span className="flex-1 text-sm font-semibold tracking-wide">{selectedModel.label}</span>
           </>
         ) : (
-          <span className="flex-1 text-sm font-semibold tracking-wide text-neutral-400">
-            {gameStrings.selectModelPlaceholder}
+          <span className="flex flex-1 items-center gap-1 text-sm font-semibold tracking-wide text-neutral-400">
+            <span>{gameStrings.selectModelPlaceholder}</span>
+            <Ellipsis className="size-4 shrink-0 opacity-60" aria-hidden strokeWidth={2} />
           </span>
         )}
-        <span className="text-[0.6rem] opacity-40">
-          {open ? gameStrings.symbols.caretUp : gameStrings.symbols.caretDown}
+        <span className="text-neutral-400 opacity-70">
+          {open ? (
+            <ChevronUp className="size-4 shrink-0" aria-hidden strokeWidth={2.5} />
+          ) : (
+            <ChevronDown className="size-4 shrink-0" aria-hidden strokeWidth={2.5} />
+          )}
         </span>
       </button>
     </div>

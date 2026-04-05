@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+import { ArrowLeft, ChevronLeft, ChevronRight, Copyright } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -51,8 +52,9 @@ export default function PlayLobbyPage() {
           {/* Back link */}
           <Link
             href="/"
-            className={`${mono.className} mb-12 self-start text-xs font-semibold tracking-widest text-neutral-400 uppercase transition-colors hover:text-black`}
+            className={`${mono.className} mb-12 flex items-center gap-1.5 self-start text-xs font-semibold tracking-widest text-neutral-400 uppercase transition-colors hover:text-black`}
           >
+            <ArrowLeft className="size-3.5 shrink-0" aria-hidden />
             {playStrings.backToVibedle}
           </Link>
 
@@ -114,9 +116,14 @@ export default function PlayLobbyPage() {
             className="group relative w-full overflow-hidden border-2 border-black bg-black px-8 py-8 text-white transition-colors hover:bg-white hover:text-black"
           >
             <span
-              className={`${mono.className} relative z-10 text-lg font-bold tracking-widest uppercase`}
+              className={`${mono.className} relative z-10 flex items-center justify-center gap-1 text-lg font-bold tracking-widest uppercase`}
             >
+              <ChevronLeft className="size-5 shrink-0" aria-hidden />
               {playStrings.ctaPlay}
+              <span className="font-normal opacity-80" aria-hidden>
+                /
+              </span>
+              <ChevronRight className="size-5 shrink-0" aria-hidden />
             </span>
           </button>
         </div>
@@ -125,7 +132,10 @@ export default function PlayLobbyPage() {
       <footer
         className={`mt-auto grid w-full grid-cols-2 border-t border-neutral-200 text-sm tracking-wider uppercase ${mono.className} text-neutral-500`}
       >
-        <div className="border-r border-neutral-200 p-5">{playStrings.footerYear}</div>
+        <div className="flex items-center justify-center gap-1.5 border-r border-neutral-200 p-5">
+          <Copyright className="size-3.5 shrink-0" aria-hidden />
+          {playStrings.footerYear}
+        </div>
         <div className="flex items-center justify-end gap-2 p-5 text-right">
           <span>{playStrings.footerMadeBy}</span>
           <a

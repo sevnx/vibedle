@@ -1,11 +1,11 @@
 export const gameStrings = {
   iframeTitle: "Vibe coded website",
-  brandBack: "\u2190 VIBEDLE",
+  brandBack: "VIBEDLE",
   modelLabel: "MODEL",
   uiSkillLabel: "SKILL",
-  selectModelPlaceholder: "Choose a model\u2026",
+  selectModelPlaceholder: "Choose a model",
   guessLabel: "GUESS",
-  continueLabel: "CONTINUE \u2192",
+  continueLabel: "CONTINUE",
   uiSkillOnTitle: "UI skill: ON",
   uiSkillOffTitle: "UI skill: OFF",
   uiSkillUsedAria: "UI skill used",
@@ -16,7 +16,7 @@ export const gameStrings = {
     plusOnePoint: "+1 POINT",
     wrong: "WRONG",
     roundOver: "ROUND OVER",
-    itWas: "It was\u2026",
+    itWas: "It was",
   },
   feedbackTable: {
     lab: "LAB",
@@ -27,10 +27,9 @@ export const gameStrings = {
   recap: {
     title: "GAME OVER",
     outOfCorrect: "correct",
-    playAgain: "< PLAY AGAIN/ >",
-    home: "\u2190 HOME",
+    playAgain: "PLAY AGAIN",
+    home: "HOME",
     roundPrefix: "R",
-    miss: "\u2717",
   },
   guessSuffixes: {
     leftSingular: "guess left",
@@ -38,23 +37,16 @@ export const gameStrings = {
     trySingular: "try",
     tryPlural: "tries",
   },
-  symbols: {
-    check: "\u2713",
-    cross: "\u2717",
-    warning: "!",
-    caretUp: "\u25b2",
-    caretDown: "\u25bc",
-  },
   roundLabel: "ROUND",
 } as const;
 
 export const playStrings = {
-  backToVibedle: "\u2190 VIBEDLE",
+  backToVibedle: "VIBEDLE",
   headingHowTo: "HOW TO",
   headingPlay: "PLAY",
-  ctaPlay: "< PLAY/ >",
+  ctaPlay: "PLAY",
   footerMadeBy: "MADE BY SEV",
-  footerYear: "\u00a9 2026",
+  footerYear: "2026",
   rules: [
     { num: "01", text: "YOU SEE A VIBE-CODED WEBSITE" },
     { num: "02", text: "GUESS WHICH AI MODEL BUILT IT" },

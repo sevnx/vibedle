@@ -1,3 +1,5 @@
+import { ArrowRight } from "lucide-react";
+
 import { gameMono } from "@/lib/game/fonts";
 import { gameStrings } from "@/lib/game/strings";
 import type { ModelId } from "@/lib/game/types";
@@ -36,7 +38,10 @@ export function GameControls({
               "bg-black text-white hover:bg-neutral-800",
             ].join(" ")}
           >
-            <span className="text-sm font-bold tracking-widest uppercase">{gameStrings.continueLabel}</span>
+            <span className="flex items-center justify-center gap-2 text-sm font-bold tracking-widest uppercase">
+              {gameStrings.continueLabel}
+              <ArrowRight className="size-4 shrink-0" aria-hidden strokeWidth={2.5} />
+            </span>
           </button>
         ) : (
           <>
@@ -88,17 +93,7 @@ export function GameControls({
           <span className={`${gameMono.className} py-2 text-[0.55rem] font-semibold tracking-[0.2em] uppercase`}>
             {gameStrings.guessLabel}
           </span>
-          <svg
-            viewBox="0 0 20 20"
-            className="size-5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M4 10h12M10 4l6 6-6 6" />
-          </svg>
+          <ArrowRight className="size-5" aria-hidden strokeWidth={2.5} />
         </button>
       )}
     </div>

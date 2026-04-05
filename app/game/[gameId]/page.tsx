@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
@@ -49,6 +50,7 @@ export default function GamePage() {
           href="/play"
           className={`${gameMono.className} flex items-center gap-1.5 rounded-full border border-neutral-200/80 bg-white/90 px-3.5 py-2 text-xs font-semibold tracking-widest text-neutral-500 shadow-lg backdrop-blur-sm uppercase transition-colors hover:text-black`}
         >
+          <ArrowLeft className="size-3.5 shrink-0" aria-hidden />
           {gameStrings.brandBack}
         </Link>
       </div>

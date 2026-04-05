@@ -1,3 +1,5 @@
+import { Check, X } from "lucide-react";
+
 import { gameMono } from "@/lib/game/fonts";
 import { modelById } from "@/lib/game/models";
 import { gameStrings } from "@/lib/game/strings";
@@ -86,11 +88,11 @@ export function FeedbackTable({
                   isCorrect ? "bg-emerald-50" : "bg-red-50",
                 ].join(" ")}
               >
-                <span
-                  className={`${gameMono.className} text-sm font-bold ${isCorrect ? "text-emerald-500" : "text-red-400"}`}
-                >
-                  {isCorrect ? gameStrings.symbols.check : gameStrings.symbols.cross}
-                </span>
+                {isCorrect ? (
+                  <Check className="size-4 text-emerald-500" aria-hidden strokeWidth={2.5} />
+                ) : (
+                  <X className="size-4 text-red-400" aria-hidden strokeWidth={2.5} />
+                )}
               </div>
             )}
           </div>
