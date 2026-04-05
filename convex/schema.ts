@@ -1,11 +1,7 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
-const modelIdValidator = v.union(
-  v.literal("gpt-5.4"),
-  v.literal("claude-4.6-opus"),
-  v.literal("gemini-3.1-pro"),
-);
+import { modelIdValidator } from "./models";
 
 const gameSessionStatusValidator = v.union(v.literal("active"), v.literal("completed"));
 const gameRoundStatusValidator = v.union(v.literal("playing"), v.literal("solved"), v.literal("failed"));

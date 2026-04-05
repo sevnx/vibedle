@@ -6,6 +6,7 @@ export const gameStrings = {
   selectModelPlaceholder: "Choose a model",
   guessLabel: "GUESS",
   continueLabel: "CONTINUE",
+  roundOverLoading: "[ LOADING ]",
   uiSkillOnTitle: "UI skill: ON",
   uiSkillOffTitle: "UI skill: OFF",
   uiSkillUsedAria: "UI skill used",

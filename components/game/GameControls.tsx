@@ -27,38 +27,37 @@ export function GameControls({
   onContinue: () => void;
 }) {
   return (
-    <div className="fixed bottom-6 left-1/2 z-40 flex -translate-x-1/2 items-stretch gap-3">
-      <div className="flex items-center gap-2 rounded-2xl border border-neutral-200/80 bg-white/90 p-3 shadow-2xl backdrop-blur-md">
+    <div className="fixed bottom-8 left-1/2 z-40 flex -translate-x-1/2 items-stretch gap-5">
+      <div className="flex items-center gap-4 rounded-3xl border border-neutral-200/80 bg-white/90 px-7 py-5 shadow-2xl backdrop-blur-md">
         {roundResolved ? (
           <button
             onClick={onContinue}
             className={[
-              "rounded-xl px-10 py-3.5 transition-all active:scale-95",
+              "rounded-2xl border-0 px-12 py-5 transition-all active:scale-95",
               gameMono.className,
-              "bg-black text-white hover:bg-neutral-800",
             ].join(" ")}
           >
-            <span className="flex items-center justify-center gap-2 text-sm font-bold tracking-widest uppercase">
+            <span className="flex items-center justify-center gap-2.5 text-base font-bold tracking-widest uppercase">
               {gameStrings.continueLabel}
-              <ArrowRight className="size-4 shrink-0" aria-hidden strokeWidth={2.5} />
+              <ArrowRight className="size-5 shrink-0" aria-hidden strokeWidth={2.5} />
             </span>
           </button>
         ) : (
           <>
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-2">
               <span
-                className={`${gameMono.className} px-1 text-[0.55rem] font-semibold tracking-[0.2em] text-neutral-400 uppercase`}
+                className={`${gameMono.className} px-1 text-[0.7rem] font-semibold tracking-[0.2em] text-neutral-400 uppercase`}
               >
                 {gameStrings.modelLabel}
               </span>
               <ModelSelector selected={selectedModel} onChange={onSelectedModel} />
             </div>
 
-            <div className="mx-1 h-10 w-px self-center bg-neutral-200" />
+            <div className="mx-2 h-14 w-px self-center bg-neutral-200" />
 
-            <div className="flex flex-col items-center gap-1.5">
+            <div className="flex flex-col items-center gap-2">
               <span
-                className={`${gameMono.className} text-[0.55rem] font-semibold tracking-[0.2em] text-neutral-400 uppercase`}
+                className={`${gameMono.className} text-[0.7rem] font-semibold tracking-[0.2em] text-neutral-400 uppercase`}
               >
                 {gameStrings.uiSkillLabel}
               </span>
@@ -66,13 +65,13 @@ export function GameControls({
                 onClick={onToggleSkill}
                 title={usedSkill ? gameStrings.uiSkillOnTitle : gameStrings.uiSkillOffTitle}
                 className={[
-                  "flex size-12 items-center justify-center rounded-xl transition-all",
+                  "flex size-16 items-center justify-center rounded-2xl transition-all",
                   usedSkill
                     ? "bg-[#F5F3FF] hover:bg-[#EDE9FE]"
                     : "border border-neutral-200 bg-white hover:bg-neutral-50",
                 ].join(" ")}
               >
-                <SkillIcon active={usedSkill} className="size-5" />
+                <SkillIcon active={usedSkill} className="size-6" />
               </button>
             </div>
           </>
@@ -84,16 +83,16 @@ export function GameControls({
           onClick={onGuess}
           disabled={!canGuess}
           className={[
-            "flex w-20 flex-col items-center justify-center gap-3 rounded-2xl pb-5 transition-all",
+            "flex w-32 flex-col items-center justify-center gap-3 rounded-3xl pb-6 pt-1 shadow-2xl transition-all",
             canGuess
-              ? "bg-[#7C3AED] text-white hover:bg-[#6D28D9] shadow-2xl shadow-purple-300"
+              ? "bg-[#7C3AED] text-white shadow-purple-300 hover:bg-[#6D28D9]"
               : "cursor-not-allowed border border-neutral-200/80 bg-white/90 text-neutral-300 shadow-2xl backdrop-blur-md",
           ].join(" ")}
         >
-          <span className={`${gameMono.className} py-2 text-[0.55rem] font-semibold tracking-[0.2em] uppercase`}>
+          <span className={`${gameMono.className} py-2 text-[0.7rem] font-semibold tracking-[0.2em] uppercase`}>
             {gameStrings.guessLabel}
           </span>
-          <ArrowRight className="size-5" aria-hidden strokeWidth={2.5} />
+          <ArrowRight className="size-6" aria-hidden strokeWidth={2.5} />
         </button>
       )}
     </div>

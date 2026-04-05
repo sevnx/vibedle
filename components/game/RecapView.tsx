@@ -1,17 +1,16 @@
-import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
+import { RecapPlayAgainButton } from "@/components/game/RecapPlayAgainButton";
 import { gameEpilogue, gameMono, gameNewsreader } from "@/lib/game/fonts";
 import { gameStrings } from "@/lib/game/strings";
 import type { GameGrade } from "@/lib/game/types";
 
 export function RecapView({
-  gameId,
   score,
   totalRounds,
   grade,
 }: {
-  gameId: string;
   score: number;
   totalRounds: number;
   grade: GameGrade;
@@ -30,7 +29,7 @@ export function RecapView({
         <div
           role="group"
           aria-label={`${score} out of ${totalRounds}`}
-          className="mb-6 w-full max-w-md overflow-hidden border border-neutral-200 bg-neutral-50 sm:mb-8 sm:max-w-lg sm:rounded-2xl"
+          className="mb-6 w-full max-w-md overflow-hidden border border-neutral-200 bg-neutral-50 sm:mb-8 sm:max-w-lg"
         >
           <div className="grid grid-cols-3 divide-x divide-neutral-200">
             <div className="grid min-h-22 min-w-0 place-items-center px-1 py-4 sm:min-h-26 sm:py-6">
@@ -66,17 +65,7 @@ export function RecapView({
         <p className={`${gameMono.className} mb-12 text-sm text-neutral-500 sm:mb-14`}>{grade.sub}</p>
 
         <div className="flex w-full flex-col gap-3 sm:flex-row">
-          <Link
-            href={`/game/${gameId}`}
-            className={`${gameMono.className} flex flex-1 items-center justify-center gap-1 border-2 border-black bg-black py-4 text-center text-sm font-bold tracking-widest text-white uppercase transition-colors hover:bg-white hover:text-black`}
-          >
-            <ChevronLeft className="size-4 shrink-0" aria-hidden />
-            {gameStrings.recap.playAgain}
-            <span className="font-normal opacity-80" aria-hidden>
-              /
-            </span>
-            <ChevronRight className="size-4 shrink-0" aria-hidden />
-          </Link>
+          <RecapPlayAgainButton />
           <Link
             href="/"
             className={`${gameMono.className} flex flex-1 items-center justify-center gap-2 border-2 border-neutral-300 bg-white py-4 text-center text-sm font-bold tracking-widest text-neutral-500 uppercase transition-colors hover:border-black hover:text-black`}

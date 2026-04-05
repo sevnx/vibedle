@@ -1,4 +1,6 @@
-export type ModelId = "gpt-5.4" | "claude-4.6-opus" | "gemini-3.1-pro";
+import type { ModelId } from "./modelCatalog";
+
+export type { ModelId };
 
 export type NotifType = "round-start" | "correct" | "wrong" | "round-over";
 

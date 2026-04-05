@@ -1,4 +1,10 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 import type { Phase, RoundResult } from "@/lib/game/types";
+
+const PIPS_VISIBLE_MS = 3000;
 
 export function RoundPips({
   totalRounds,
@@ -11,8 +17,22 @@ export function RoundPips({
   phase: Phase;
   roundResults: RoundResult[];
 }) {
+  const [fadedOut, setFadedOut] = useState(false);
+
+  useEffect(() => {
+    setFadedOut(false);
+    const id = window.setTimeout(() => setFadedOut(true), PIPS_VISIBLE_MS);
+    return () => window.clearTimeout(id);
+  }, [round]);
+
   return (
-    <div className="fixed top-4 left-1/2 z-40 flex min-w-22 -translate-x-1/2 items-center justify-center gap-1.5 rounded-full border border-neutral-200/80 bg-white/90 px-3.5 py-2 shadow-lg backdrop-blur-sm">
+    <div
+      className={[
+        "fixed top-4 left-1/2 z-40 flex min-w-22 -translate-x-1/2 items-center justify-center gap-2 rounded-full border border-neutral-200/80 bg-white/90 px-5 py-2.5 shadow-lg backdrop-blur-sm transition-opacity duration-700 ease-out",
+        fadedOut ? "pointer-events-none opacity-0" : "opacity-100",
+      ].join(" ")}
+      aria-hidden
+    >
       {Array.from({ length: totalRounds }).map((_, i) => {
         const done = i < round || phase === "completed";
         const active = i === round && phase === "playing";
@@ -22,7 +42,7 @@ export function RoundPips({
           <span
             key={i}
             className={[
-              "size-2 rounded-full transition-all",
+              "size-2.5 rounded-full transition-all",
               active ? "scale-125 bg-black" : "",
               done && solved ? "bg-emerald-500" : "",
               done && !solved ? "bg-red-400" : "",

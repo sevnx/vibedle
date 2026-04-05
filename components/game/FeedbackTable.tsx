@@ -10,7 +10,7 @@ import { SkillIcon } from "@/components/game/SkillIcon";
 function HeaderLabel({ text }: { text: string }) {
   return (
     <span
-      className={`${gameMono.className} text-[0.5rem] font-semibold tracking-[0.2em] text-neutral-400 uppercase`}
+      className={`${gameMono.className} text-[0.65rem] font-semibold tracking-[0.2em] text-neutral-400 uppercase`}
     >
       {text}
     </span>
@@ -25,19 +25,19 @@ export function FeedbackTable({
   showResult?: boolean;
 }) {
   return (
-    <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
-      <div className="flex items-center border-b border-neutral-200 bg-neutral-50">
-        <div className="flex w-12 justify-center px-3 py-1.5">
+    <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+      <div className="flex min-h-11 items-center border-b border-neutral-200 bg-neutral-50">
+        <div className="flex w-16 justify-center px-3 py-2.5">
           <HeaderLabel text={gameStrings.feedbackTable.lab} />
         </div>
-        <div className="flex flex-1 border-l border-neutral-200 px-3 py-1.5">
+        <div className="flex flex-1 border-l border-neutral-200 px-4 py-2.5">
           <HeaderLabel text={gameStrings.feedbackTable.model} />
         </div>
-        <div className="flex w-20 justify-center border-l border-neutral-200 px-3 py-1.5">
+        <div className="flex w-28 justify-center border-l border-neutral-200 px-3 py-2.5">
           <HeaderLabel text={gameStrings.feedbackTable.uiSkill} />
         </div>
         {showResult && (
-          <div className="w-10 border-l border-neutral-200">
+          <div className="flex w-14 items-center justify-center border-l border-neutral-200 px-2 py-2.5">
             <HeaderLabel text={gameStrings.feedbackTable.result} />
           </div>
         )}
@@ -55,43 +55,43 @@ export function FeedbackTable({
               i < records.length - 1 ? "border-b border-neutral-200" : "",
             ].join(" ")}
           >
-            <div className="flex w-12 justify-center px-2 py-2">
+            <div className="flex w-16 justify-center px-2 py-3">
               <div
-                className="flex size-7 shrink-0 items-center justify-center rounded-lg border"
+                className="flex size-10 shrink-0 items-center justify-center rounded-xl border"
                 style={{ borderColor: model.color, backgroundColor: model.bgColor }}
               >
-                <model.Icon className="size-4" style={{ color: model.color }} />
+                <model.Icon className="size-5" style={{ color: model.color }} />
               </div>
             </div>
 
-            <div className="flex flex-1 items-center border-l border-neutral-200 px-3 py-2">
-              <span className={`${gameMono.className} text-xs font-semibold text-neutral-800`}>
-                {model.label}
+            <div className="flex flex-1 items-center border-l border-neutral-200 px-4 py-3">
+              <span className={`${gameMono.className} text-sm font-semibold text-neutral-800`}>
+                {model.id}
               </span>
             </div>
 
-            <div className="flex w-20 justify-center border-l border-neutral-200 px-2 py-2">
+            <div className="flex w-28 justify-center border-l border-neutral-200 px-2 py-3">
               <div
                 className={[
-                  "flex size-7 items-center justify-center rounded-lg border",
+                  "flex size-10 items-center justify-center rounded-xl border",
                   record.usedSkill ? "border-[#7C3AED]/20 bg-[#F5F3FF]" : "border-neutral-200 bg-neutral-50",
                 ].join(" ")}
               >
-                <SkillIcon active={record.usedSkill} className="size-4" />
+                <SkillIcon active={record.usedSkill} className="size-5" />
               </div>
             </div>
 
             {showResult && (
               <div
                 className={[
-                  "flex w-10 self-stretch items-center justify-center border-l border-neutral-200",
+                  "flex w-14 self-stretch items-center justify-center border-l border-neutral-200 py-2",
                   isCorrect ? "bg-emerald-50" : "bg-red-50",
                 ].join(" ")}
               >
                 {isCorrect ? (
-                  <Check className="size-4 text-emerald-500" aria-hidden strokeWidth={2.5} />
+                  <Check className="size-5 text-emerald-500" aria-hidden strokeWidth={2.5} />
                 ) : (
-                  <X className="size-4 text-red-400" aria-hidden strokeWidth={2.5} />
+                  <X className="size-5 text-red-400" aria-hidden strokeWidth={2.5} />
                 )}
               </div>
             )}

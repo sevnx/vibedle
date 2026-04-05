@@ -31,7 +31,6 @@ export default function GameRecapPage() {
 
   return (
     <RecapView
-      gameId={gameId}
       score={score}
       totalRounds={recap.rounds.length}
       grade={gradeGame(score, recap.rounds.length)}

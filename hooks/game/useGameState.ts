@@ -10,6 +10,7 @@ import {
   DEFAULT_NOTIFICATION_MS,
   ROUND_OVER_NOTIFICATION_MS,
 } from "@/lib/game/constants";
+import { resolveHostedSiteIframeSrc } from "@/lib/game/hostedSiteUrl";
 import type { GuessRecord, ModelId, Notification, Phase, RoundResult } from "@/lib/game/types";
 
 const TOTAL_ROUNDS_FALLBACK = 5;
@@ -37,6 +38,7 @@ export function useGameState({ gameId }: { gameId: string }) {
   const [notifVisible, setNotifVisible] = useState(false);
   const [roundOverride, setRoundOverride] = useState<RoundPayload | null>(null);
   const [nextRoundPayload, setNextRoundPayload] = useState<RoundPayload | null>(null);
+  const [navigatingToRecap, setNavigatingToRecap] = useState(false);
 
   const notifTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -52,7 +54,7 @@ export function useGameState({ gameId }: { gameId: string }) {
 
   const activeRound = roundOverride ?? fetchedRound;
   const totalRounds = activeRound?.totalRounds ?? TOTAL_ROUNDS_FALLBACK;
-  const websiteUrl = activeRound?.websiteUrl ?? "about:blank";
+  const websiteUrl = resolveHostedSiteIframeSrc(activeRound?.websiteUrl ?? "about:blank");
   const isRoundLoading = !activeRound;
 
   const showNotif = useCallback((nextNotif: Notification, durationMs = DEFAULT_NOTIFICATION_MS) => {
@@ -132,12 +134,12 @@ export function useGameState({ gameId }: { gameId: string }) {
     }
 
     showNotif({ type: "wrong", round: activeRound.roundIndex, guesses: newGuesses });
-    setSelectedModel(null);
   }, [activeRound, convexGameId, currentGuesses, roundResolved, selectedModel, showNotif, submitGuess, usedSkill]);
 
   const advanceRound = useCallback(async () => {
     if (round + 1 >= totalRounds) {
       setPhase("completed");
+      setNavigatingToRecap(true);
       router.push(`/game/${gameId}/recap`);
       return;
     }
@@ -159,6 +161,13 @@ export function useGameState({ gameId }: { gameId: string }) {
 
   const canGuess = !!selectedModel && !roundResolved && !isRoundLoading;
 
+  const showRoundTransitionLoading = navigatingToRecap || (phase === "playing" && !activeRound);
+
+  const nextRoundPreloadSrc =
+    phase === "playing" && roundResolved && nextRoundPayload
+      ? resolveHostedSiteIframeSrc(nextRoundPayload.websiteUrl)
+      : null;
+
   return {
     round,
     websiteUrl,
@@ -176,5 +185,7 @@ export function useGameState({ gameId }: { gameId: string }) {
     advanceRound,
     canGuess,
     totalRounds,
+    showRoundTransitionLoading,
+    nextRoundPreloadSrc,
   };
 }

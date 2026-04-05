@@ -4,14 +4,10 @@ import type { Id } from "./_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "./_generated/server";
 import { mutation, query } from "./_generated/server";
 
+import { modelIdValidator } from "./models";
+
 const MAX_GUESSES = 3;
 const TOTAL_ROUNDS = 5;
-
-const modelIdValidator = v.union(
-  v.literal("gpt-5.4"),
-  v.literal("claude-4.6-opus"),
-  v.literal("gemini-3.1-pro"),
-);
 
 const guessRecordValidator = v.object({
   model: modelIdValidator,
