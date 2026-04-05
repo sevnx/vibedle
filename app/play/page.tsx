@@ -10,8 +10,8 @@ import {
   Azeret_Mono,
   Newsreader,
 } from "next/font/google";
-import { GitHub } from "@/components/GitHub";
-import { Website } from "@/components/Website";
+import { GitHub } from "@/components/icons/GitHub";
+import { Website } from "@/components/icons/Website";
 import { api } from "@/convex/_generated/api";
 import { playStrings } from "@/lib/game/strings";
 

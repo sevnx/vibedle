@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Epilogue, Azeret_Mono, Lilita_One, Newsreader } from 'next/font/google';
-import { ClaudeAI } from '@/components/ClaudeAI';
-import { GeminiAI } from '@/components/GeminiAI';
-import { OpenAI } from '@/components/OpenAI';
-import { GitHub } from '@/components/GitHub';
-import { Website } from '@/components/Website';
+import { ClaudeAI } from '@/components/icons/ClaudeAI';
+import { GeminiAI } from '@/components/icons/GeminiAI';
+import { OpenAI } from '@/components/icons/OpenAI';
+import { GitHub } from '@/components/icons/GitHub';
+import { Website } from '@/components/icons/Website';
 
 const epilogue = Epilogue({
   subsets: ['latin'],
